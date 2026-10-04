@@ -7,14 +7,15 @@
 <body>
 
     <h1>Student Management Portal</h1>
-<form action="/students/search" method="GET">
-    <input
-        type="text"
-        name="keyword"
-        placeholder="Search student..."
-    >
-    <button type="submit">Search</button>
-</form>
+
+    <form action="/students/search" method="GET">
+        <input
+            type="text"
+            name="keyword"
+            placeholder="Search student..."
+        >
+        <button type="submit">Search</button>
+    </form>
 
     <a href="/students/add">Add Student</a>
 
@@ -25,12 +26,13 @@
     <table border="1" cellpadding="10">
 
         <tr>
-            <th>ID</th> 
+            <th>ID</th>
             <th>Student ID</th>
             <th>Name</th>
             <th>Course</th>
             <th>Year</th>
             <th>Email</th>
+            <th>Action</th>
         </tr>
 
         <% students.forEach(student => { %>
@@ -50,6 +52,13 @@
             <td><%= student.year_level %></td>
 
             <td><%= student.email %></td>
+
+            <td>
+                <form action="/students/delete" method="POST">
+                    <input type="hidden" name="id" value="<%= student.id %>">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
         </tr>
 
         <% }); %>
@@ -58,3 +67,4 @@
 
 </body>
 </html>
+```

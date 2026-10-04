@@ -77,6 +77,21 @@ app.post('/students/add', (req, res) => {
         res.redirect('/');
     });
 });
+// Delete Student
+app.post('/students/delete', (req, res) => {
+    const { id } = req.body;
+
+    const sql = 'DELETE FROM students WHERE id = ?';
+
+    db.query(sql, [id], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Unable to delete student');
+        }
+
+        res.redirect('/');
+    });
+});
 // Search Students
 app.get('/students/search', (req, res) => {
     const keyword = req.query.keyword || '';
