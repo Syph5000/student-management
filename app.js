@@ -79,6 +79,143 @@ app.post('/students/add', (req, res) => {
         res.redirect('/');
     });
 });
+// Show Edit Student Page
+app.get('/students/edit/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'SELECT * FROM students WHERE id = ?';
+
+    db.query(sql, [id], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Database error');
+        }
+
+        if (results.length === 0) {
+            return res.status(404).send('Student not found');
+        }
+
+        res.render('edit', {
+            student: results[0]
+        });
+    });
+});
+// Edit Student Page
+app.get('/students/edit/', (req, res) => {
+const { id } = req.params;
+
+db.query(
+    'SELECT * FROM students WHERE id = ?',
+    [id],
+    (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Database error');
+        }
+
+        if (results.length === 0) {
+            return res.status(404).send('Student not found');
+        }
+
+        res.render('edit', {
+            student: results[0]
+        });
+    }
+);
+
+});
+
+// Update Student
+app.post('/students/edit/', (req, res) => {
+const { id } = req.params;
+
+const {
+    student_id,
+    first_name,
+    last_name,
+    course,
+    year_level,
+    email
+} = req.body;
+
+// Required field validation
+if (
+    !student_id ||
+    !first_name ||
+    !last_name ||
+    !course ||
+    !year_level ||
+    !email
+) {
+    return res.status(400).send('All fields are required');
+}
+
+// Year level validation
+const year = Number(year_level);
+
+if (!Number.isInteger(year) || year < 1 || year > 5) {
+    return res.status(400).send('Year level must be between 1 and 5');
+}
+
+// Email validation
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailPattern.test(email)) {
+    return res.status(400).send('Invalid email address');
+}
+
+// Check if another student already uses the Student ID
+const checkSql = `
+    SELECT id FROM students
+    WHERE student_id = ? AND id != ?
+`;
+
+db.query(
+    checkSql,
+    [student_id, id],
+    (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Database error');
+        }
+
+        if (results.length > 0) {
+            return res.status(400).send('Student ID already exists');
+        }
+
+        const sql = `
+            UPDATE students
+            SET student_id = ?,
+                first_name = ?,
+                last_name = ?,
+                course = ?,
+                year_level = ?,
+                email = ?
+            WHERE id = ?
+        `;
+
+        const values = [
+            student_id,
+            first_name,
+            last_name,
+            course,
+            year,
+            email,
+            id
+        ];
+
+        db.query(sql, values, (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Unable to update student');
+            }
+
+            res.redirect('/');
+        });
+    }
+);
+
+});
 // Delete Student
 app.post('/students/delete', (req, res) => {
     const { id } = req.body;
