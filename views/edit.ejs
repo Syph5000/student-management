@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Edit Student</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
@@ -16,8 +17,7 @@
             name="student_id"
             value="<%= student.student_id %>"
             required
-        >
-        <br><br>
+        ><br><br>
 
         <label>First Name:</label><br>
         <input
@@ -25,8 +25,7 @@
             name="first_name"
             value="<%= student.first_name %>"
             required
-        >
-        <br><br>
+        ><br><br>
 
         <label>Last Name:</label><br>
         <input
@@ -34,8 +33,7 @@
             name="last_name"
             value="<%= student.last_name %>"
             required
-        >
-        <br><br>
+        ><br><br>
 
         <label>Course:</label><br>
         <input
@@ -43,8 +41,7 @@
             name="course"
             value="<%= student.course %>"
             required
-        >
-        <br><br>
+        ><br><br>
 
         <label>Year Level:</label><br>
         <input
@@ -54,8 +51,7 @@
             min="1"
             max="5"
             required
-        >
-        <br><br>
+        ><br><br>
 
         <label>Email:</label><br>
         <input
@@ -63,8 +59,7 @@
             name="email"
             value="<%= student.email %>"
             required
-        >
-        <br><br>
+        ><br><br>
 
         <button type="submit">Update Student</button>
 
